@@ -1,0 +1,49 @@
+[Unit]
+Description=Portfolio FastAPI Backend (Gunicorn + Uvicorn)
+Documentation=https://github.com/YOUR_USERNAME/cinematic-portfolio
+After=network.target
+
+[Service]
+# Run as your Linux user, never as root
+User=YOUR_LINUX_USER
+Group=YOUR_LINUX_USER
+
+# Working directory: the backend/ folder
+WorkingDirectory=/home/YOUR_LINUX_USER/portfolio/backend
+
+# Load all environment variables from .env
+EnvironmentFile=/home/YOUR_LINUX_USER/portfolio/backend/.env
+
+# Start gunicorn with uvicorn workers
+ExecStart=/home/YOUR_LINUX_USER/portfolio/backend/venv/bin/gunicorn \
+    app.main:app \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --workers 2 \
+    --bind 127.0.0.1:8000 \
+    --timeout 30 \
+    --keepalive 5 \
+    --access-logfile - \
+    --error-logfile -
+
+# Graceful restart
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Restart policy
+Restart=always
+RestartSec=5
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=portfolio-api
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/YOUR_LINUX_USER/portfolio/backend/data
+
+[Install]
+WantedBy=multi-user.target

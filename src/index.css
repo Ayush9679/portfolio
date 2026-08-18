@@ -1,0 +1,150 @@
+/* ────────────────────────────────────────────────────────────────────────────
+   GLOBAL DESIGN SYSTEM — Electric Cyan on Charcoal
+   ──────────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;600&family=Montserrat:wght@200;300;400;500;600;700&family=Herr+Von+Muellerhoff&display=swap');
+@import "tailwindcss";
+
+/* ── Color tokens ─────────────────────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --bg-base:       #070B0F;
+  --bg-surface:    #0C1219;
+  --bg-elevated:   #111B26;
+  --bg-card:       #0F1720;
+
+  /* Accents */
+  --cyan:          #00D4FF;
+  --cyan-dim:      #00A8CC;
+  --cyan-glow:     rgba(0, 212, 255, 0.15);
+  --cyan-border:   rgba(0, 212, 255, 0.25);
+  --violet:        #7C3AED;
+  --violet-dim:    #6D28D9;
+
+  /* Text */
+  --text-primary:  #E8F4F8;
+  --text-secondary:#A8BEC8;
+  --text-muted:    #5A7A8A;
+
+  /* Borders */
+  --border-subtle: #1A2A38;
+  --border-mid:    #1E3547;
+  --border-accent: rgba(0, 212, 255, 0.3);
+}
+
+/* ── Base resets ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+}
+
+/* ── Custom scrollbar ────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-mid);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyan-dim);
+}
+
+/* ── Selection ───────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 212, 255, 0.25);
+  color: #E8F4F8;
+}
+
+/* ── Typography helpers ──────────────────────────────────────────────────── */
+.font-display  { font-family: 'Bebas Neue', sans-serif; }
+.font-body     { font-family: 'Montserrat', sans-serif; }
+.font-mono     { font-family: 'JetBrains Mono', monospace; }
+.font-script   { font-family: 'Herr Von Muellerhoff', cursive; }
+
+/* ── Noise grain overlay (subtle texture) ────────────────────────────────── */
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px;
+  z-index: 1;
+}
+
+/* ── Glow utilities ─────────────────────────────────────────────────────── */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15),
+              0 0 60px rgba(0, 212, 255, 0.05);
+}
+.text-glow-cyan {
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+/* ── Animated gradient border ───────────────────────────────────────────── */
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1.0; }
+}
+.border-glow-anim {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+/* ── Scanline effect ─────────────────────────────────────────────────────── */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 212, 255, 0.012) 2px,
+    rgba(0, 212, 255, 0.012) 4px
+  );
+  z-index: 1;
+}
+
+/* ── Terminal cursor blink ───────────────────────────────────────────────── */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: var(--cyan);
+  animation: cursorBlink 1s step-end infinite;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
